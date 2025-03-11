@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebXR + WebGL</title>
+</head>
+<body>
+    <h1>WebXR + WebGL</h1>
+    <button id="startButton">AR 시작</button>
+    <canvas id="xrCanvas"></canvas>
+    
+    <script>
+        let xrSession = null;
+        let gl = document.getElementById("xrCanvas").getContext("webgl", { xrCompatible: true });
+
+        async function startXR() {
+            if (!navigator.xr) {
+                alert("WebXR 미지원");
+                return;
+            }
+
+            try {
+                xrSession = await navigator.xr.requestSession('immersive-ar');
+                let xrReferenceSpace = await xrSession.requestReferenceSpace("local");
+
+                xrSession.requestAnimationFrame((time, frame) => {
+                    let pose = frame.getViewerPose(xrReferenceSpace);
+                    if (pose) {
+                        console.log("AR 카메라 위치:", pose.transform);
+                    }
+                });
+
+                alert("XR 세션 시작됨");
+            } catch (error) {
+                alert("XR 세션 요청 실패: " + error);
+            }
+        }
+
+        document.getElementById("startButton").addEventListener("click", startXR);
+    </script>
+</body>
+</html>

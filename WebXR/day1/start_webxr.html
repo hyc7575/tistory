@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebXR AR 시작</title>
+</head>
+<body>
+    <h1>WebXR AR 실행</h1>
+    <button id="startButton">AR 시작</button>
+    <script>
+        let xrSession = null;
+
+        async function startXR() {
+            if (!navigator.xr) {
+                alert("WebXR 미지원");
+                return;
+            }
+
+            try {
+                xrSession = await navigator.xr.requestSession('immersive-ar');
+                alert("XR 세션 시작됨");
+            } catch (error) {
+                alert("XR 세션 요청 실패: " + error);
+            }
+        }
+
+        document.getElementById("startButton").addEventListener("click", startXR);
+    </script>
+</body>
+</html>
